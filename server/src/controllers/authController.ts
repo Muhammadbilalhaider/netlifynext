@@ -6,7 +6,7 @@ import { changePasswordService, getOtpDetail, sendVerificationCode, updateLinkHa
 import { RESPONSE } from "../interfaces/commonInterfaces";
 import { RESPONSE_MESSAGES } from "../utils/responseMessage";
 import createEmailOptionsForSendMail from "../utils/mailOptions";
-import { generateToken } from "../utils/jwt";
+import { generateToken, verifyToken } from "../utils/jwt";
 
 // User loginn
 export const authLogin = async (req: Request, res: Response) => {
@@ -56,7 +56,7 @@ export const authLogin = async (req: Request, res: Response) => {
         const mailPayload = {
           template_type: TEMPLATE_TYPE.emailVerification,
           otp: otp,
-          name: `${body.firstName} ${body.lastName}`,
+          name: `${body.firstName} `,
           email: body.email,
         };
 
@@ -192,40 +192,54 @@ export const sendOtpController = async (req: Request, res: Response) => {
   try {
     const body = req.body;
     let response: RESPONSE;
+    let userInfo: any = await userDetail(body); // Check if user exists
 
-    let userInfo: any = await userDetail(body);
+    const otp: number = await sendVerificationCode(body); // Generate OTP
+    let mailPayload: any;
 
     if (userInfo.status) {
-      const otp: number = await sendVerificationCode(body);
-
+      // If user exists
       userInfo = userInfo?.data;
-      let mailPayload: any
 
-      if (body?.type === 1) {
-        mailPayload = {
-          template_type: TEMPLATE_TYPE.emailVerification,
-          otp: otp,
-          name: userInfo?.name,
-          email: userInfo.email,
-        };
 
-      }
-
-      createEmailOptionsForSendMail(mailPayload);
-
-      response = {
-        status: 1,
-        status_code: RESPONSE_CODES.POST,
-        message: RESPONSE_MESSAGES.otpSend,
+      // if (body?.type === 1) {
+      //   mailPayload = {
+      //     template_type: TEMPLATE_TYPE.emailVerification,
+      //     otp: otp,
+      //     name: userInfo?.name,
+      //     email: userInfo.email,
+      //   };
+      mailPayload = {
+        template_type: TEMPLATE_TYPE.emailVerification,
+        otp: otp,
+        name: userInfo?.name,
+        email: userInfo.email,
       };
     } else {
-      response = {
-        status: 0,
-        status_code: RESPONSE_CODES.NOT_FOUND,
-        message: RESPONSE_MESSAGES.noDataFound,
+      // If user does not exist, still send OTP
+      mailPayload = {
+        template_type: TEMPLATE_TYPE.emailVerification,
+        otp: otp,
+        name: "User", // Generic name
+        email: body.email, // Use email from request body
       };
     }
 
+    // Send the email
+    createEmailOptionsForSendMail(mailPayload);
+
+    response = {
+      status: 1,
+      status_code: RESPONSE_CODES.POST,
+      message: RESPONSE_MESSAGES.otpSend,
+    };
+
+    // else {
+    //   response = {
+    //     status: 0,
+    //     status_code: RESPONSE_CODES.NOT_FOUND,
+    //     message: RESPONSE_MESSAGES.noDataFound,
+    //   };
     return res.status(response.status_code).json(response);
   } catch (error) {
     return res.status(RESPONSE_CODES.ERROR).json({
@@ -235,6 +249,8 @@ export const sendOtpController = async (req: Request, res: Response) => {
     });
   }
 };
+
+
 
 // Verify otp
 export const otpVerifyController = async (req: Request, res: Response) => {
@@ -278,6 +294,12 @@ export const otpVerifyController = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+
+
+
+
 
 // Check email
 export const checkEmailController = async (req: Request, res: Response) => {

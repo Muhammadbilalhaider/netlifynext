@@ -1,13 +1,18 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowLeft, Building2, CheckCircle, Code, CreditCard, FileText, Mail, MapPin, X } from 'lucide-react'
 
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 const CreateAccount = () => {
     const [step, setstep] = useState(1);
     const [jobtitle, setJobTitle] = useState("");
     const [jobTitleList, setJobTitleList] = useState([]);
+    const [formData, setFormData] = useState({
+        name: "", email: "", phone: "", password: "", OTP: null
+    });
+
     const navigate = useRouter();
 
 
@@ -16,15 +21,13 @@ const CreateAccount = () => {
         'Advisor', 'Supervisor', 'Lead', 'Manager', 'Senior', 'Principal', 'Director', 'Executive',
         'Group', 'Vice President (VP)', 'Chief'
     ]
-    const totalstep = 12;
+    const totalstep = 13;
     var progressWidth = `${((step / totalstep) * 100)}%`;
-
     const handlestep = () => {
         if (step < totalstep) {
             setstep(step + 1)
         }
     }
-
     const handleBackStep = () => {
         if (step <= totalstep) {
             setstep(step - 1)
@@ -35,22 +38,84 @@ const CreateAccount = () => {
             setJobTitleList((titles) => [...titles, jobtitle])
             setJobTitle('');
         }
-
-
     }
-
-    const conpleteSteps = () => {
-        navigate.push('/jobFeed')
-    }
-    const handleBackStepOption =()=>{
-        navigate.push('/')
-    }
-
-
+   
     const removeListItem = (index) => {
         const updatedList = jobTitleList.filter((_, i) => i !== index);
         setJobTitleList(updatedList);
     }
+
+    const handleChaneForm = (e) => {
+        console.log(e.target.name, e.target.value)
+        setFormData(() => ({ ...formData, [e.target.name]: e.target.value}));
+        
+    }
+    const handleSignUpUser = async () => {
+        try {
+            const response = await axios.post('http://localhost:8087/api_v1/user/register',
+                {
+                    firstName: formData.name,
+                    lastName: formData.phone,
+                    email: formData.email,
+                    password: formData.password
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                if(response.data.status_code=='201')
+                {
+                    console.log("User Registered: ", response.data);
+                    handleSendOTP()
+                }
+           
+        } catch (error) {
+            console.log("Error registering user:", error.response?.data || error.message);
+        }
+    }
+    const handleSendOTP = async () => {
+        const response = await axios.post('http://localhost:8087/api_v1/auth/send-otp', {
+            "type": 1,
+            "email": formData.email
+        },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+        if (response.data.status_code == '201') {
+            handlestep()
+        }
+        console.log("OTP Send : ", response.data)
+    }
+
+   
+
+    useEffect(() => {
+        console.log(formData.name)
+    }, [formData])
+
+    const hadleAddOTP = async () => {
+        const response = await axios.put('http://localhost:8087/api_v1/auth/verify-otp',
+            {
+                otp: parseInt( formData.OTP),
+                email: formData.email
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+        if (response.data.status_code == '201') {
+           console.log('Verified')
+        }
+        console.log("OTP Send : ", response.data)
+    }
+
+
     const haldleUerSteps = () => {
         switch (step) {
             case 1:
@@ -60,13 +125,30 @@ const CreateAccount = () => {
 
                         <p className='text-xl font-bold text-center'>Create Your Account</p>
                         <div className='flex flex-col w-full space-y-3'>
-                            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg' type='email' placeholder='Enter your email' />
-                            
+                            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+                                type='text'
+                                name='name'
+                                value={formData.name}
+                                placeholder='Enter your name'
+                                onChange={handleChaneForm}
+                            />
+                            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+                                type='tel'
+                                placeholder='Phone'
+                                name='phone'
+                                value={formData.phone}
+                                onChange={handleChaneForm} />
+                            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+                                type='password'
+                                placeholder='Password'
+                                name='password'
+                                value={formData.password}
+                                onChange={handleChaneForm} />
                         </div>
 
                         <div className='flex flex-col w-full space-y-3'>
                             <button className='w-full bg-[#217346] text-white p-2 rounded-lg font-semibold' onClick={handlestep}>Continue</button>
-                            <button className='w-full bg-transparent border-2 border-[#217346] text-[#217346] p-2 rounded-lg font-medium' onClick={handleBackStepOption}>Back</button>
+                            <button className='w-full bg-transparent border-2 border-[#217346] text-[#217346] p-2 rounded-lg font-medium' onClick={()=> navigate.push('/') } >Back</button>
 
                         </div>
                     </div>
@@ -76,14 +158,19 @@ const CreateAccount = () => {
                     <div className='flex w-full flex-col justify-center items-center space-y-4'>
                         <span className='text-[#247BAF]'><Mail size={60} /></span>
 
-                        <p className='text-xl font-bold text-center'>Verify Your Email</p>
+                        <p className='text-xl font-bold text-center'>Create Your Account</p>
                         <div className='flex flex-col w-full space-y-3'>
-                            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg' type='email' placeholder='Enter your email' />
-                            <button className='text-sm text-start text-[#247BAF]'>Resend OTP</button>
+                            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+                                type='email'
+                                name='email'
+                                value={formData.email}
+                                onChange={handleChaneForm}
+                                placeholder='Enter your email' />
+
                         </div>
 
                         <div className='flex flex-col w-full space-y-3'>
-                            <button className='w-full bg-[#217346] text-white p-2 rounded-lg font-semibold' onClick={handlestep}>Continue</button>
+                            <button className='w-full bg-[#217346] text-white p-2 rounded-lg font-semibold' onClick={handleSignUpUser}>Continue</button>
                             <button className='w-full bg-transparent border-2 border-[#217346] text-[#217346] p-2 rounded-lg font-medium' onClick={handleBackStep}>Back</button>
 
                         </div>
@@ -92,11 +179,35 @@ const CreateAccount = () => {
             case 3:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-4'>
+                        <span className='text-[#247BAF]'><Mail size={60} /></span>
+
+                        <p className='text-xl font-bold text-center'>Verify Your Email</p>
+                        <div className='flex flex-col w-full space-y-3'>
+                            <input className='p-3 w-full border-2 border-[#247BAF] focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+                                type='text'
+                                name='OTP'
+                                value={formData.OTP}
+                                onChange={handleChaneForm}
+                                placeholder='Enter OTP'
+                            />
+                            <button className='text-sm text-start text-[#247BAF]'>Resend OTP</button>
+                        </div>
+
+                        <div className='flex flex-col w-full space-y-3'>
+                            <button className='w-full bg-[#217346] text-white p-2 rounded-lg font-semibold' onClick={hadleAddOTP}>Continue</button>
+                            <button className='w-full bg-transparent border-2 border-[#217346] text-[#217346] p-2 rounded-lg font-medium' onClick={handleBackStep}>Back</button>
+
+                        </div>
+                    </div>
+                )
+            case 4:
+                return (
+                    <div className='flex w-full flex-col justify-center items-center space-y-4'>
                         <span className='text-[#217346]'> <FileText size={48} /></span>
                         <p className='text-2xl font-bold '>Set Up Your Profile</p>
                         <div className='flex flex-col bg-[#FFE066] bg-opacity-20 p-4 space-y-3'>
                             <p className='px-2 font-normal text-base'>To get the most out of the platform, share as much information as possible about what you're looking for. The more we know, the better we can match you with your dream opportunities!</p>
-                            </div>
+                        </div>
 
                         <p className='text-sm text-start w-full'>Paste Your Resume</p>
                         <textarea className='w-full min-h-48 focus:outline-none rounded-lg border-2 focus:ring-1 focus:border-[#247BAF] border-[#247BAF] p-2' type='text' placeholder='Copy and paste your resume here...'>
@@ -113,7 +224,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 4:
+            case 5:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-6'>
                         <p className='text-2xl font-bold text-center'>Job Title</p>
@@ -146,7 +257,7 @@ const CreateAccount = () => {
                     </div>
                 )
 
-            case 5:
+            case 6:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-4'>
 
@@ -176,7 +287,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 6:
+            case 7:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-4'>
 
@@ -206,7 +317,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 7:
+            case 8:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-6'>
                         <span className='flex w-full flex-col justify-center items-center space-y-4'>
@@ -238,7 +349,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 8:
+            case 9:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-4'>
                         <span className='flex flex-col w-full justify-center items-center space-y-4'>
@@ -259,7 +370,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 9:
+            case 10:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-6'>
 
@@ -267,13 +378,13 @@ const CreateAccount = () => {
                             <span className='text-[#247BAF]'><Code size={50} /></span>
                             <p className='text-2xl font-bold text-center'>Excluded Technologies</p>
                             <p className='text-sm px-2'>
-                            Are there any technologies or industries you don't want to work with?
-                                </p>
+                                Are there any technologies or industries you don't want to work with?
+                            </p>
 
                         </span>
                         <div className='flex flex-row  w-full space-x-3 mt-8'>
-                        <input className='w-full flex py-3 p-3 border-2 border-[#247BAF] focus:outline-none focus:ring-1 text-sm focus:ring-[#247BAF] rounded-lg' type='email' placeholder='Enter technologies to exclude...' />
-                        <button className='flex text-sm text-start bg-transparent rounded-lg border-2 border-[#217346] p-2 text-[#247BAF] px-6 py-2'>Add</button>
+                            <input className='w-full flex py-3 p-3 border-2 border-[#247BAF] focus:outline-none focus:ring-1 text-sm focus:ring-[#247BAF] rounded-lg' type='email' placeholder='Enter technologies to exclude...' />
+                            <button className='flex text-sm text-start bg-transparent rounded-lg border-2 border-[#217346] p-2 text-[#247BAF] px-6 py-2'>Add</button>
                         </div>
 
                         <div className='flex flex-row w-full space-x-6 justify-between'>
@@ -283,7 +394,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 10:
+            case 11:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-6'>
                         <span className='flex flex-col justify-center items-center space-y-4'>
@@ -305,7 +416,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 11:
+            case 12:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-6'>
                         <span className='flex flex-col w-full justify-center items-center space-y-4'>
@@ -336,7 +447,7 @@ const CreateAccount = () => {
                         </div>
                     </div>
                 )
-            case 12:
+            case 13:
                 return (
                     <div className='flex w-full flex-col justify-center items-center space-y-6'>
                         <span className='flex flex-col w-full justify-center items-center space-y-4'>
@@ -349,7 +460,7 @@ const CreateAccount = () => {
                         </span>
 
                         <div className='flex flex-row w-full justify-center space-x-6'>
-                            <button className=' bg-[#217346] text-white p-3 rounded-lg font-semibold' onClick={conpleteSteps}>Get Started</button>
+                            <button className=' bg-[#217346] text-white p-3 rounded-lg font-semibold' onClick={ navigate.push('/jobFeed')}>Get Started</button>
 
                         </div>
                     </div>
@@ -367,17 +478,17 @@ const CreateAccount = () => {
 
                 {/* For Progress Bar  */}
                 {step < 12 && (
-                           <div className="w-full rounded-3xl">
-                  
-                           <div className="w-full h-1.5 bg-gray-200 ">
-                               <div className='flex justify-start items-start h-1.5 bg-green-600 rounded-3xl' style={{ width: progressWidth }}></div>
-                           </div>
-                           <p className='text-sm text-center mt-2'>{`Step ${step} of ${totalstep}`}</p>
-       
-       
-                       </div>
-                    )}
-             
+                    <div className="w-full rounded-3xl">
+
+                        <div className="w-full h-1.5 bg-gray-200 ">
+                            <div className='flex justify-start items-start h-1.5 bg-green-600 rounded-3xl' style={{ width: progressWidth }}></div>
+                        </div>
+                        <p className='text-sm text-center mt-2'>{`Step ${step} of ${totalstep}`}</p>
+
+
+                    </div>
+                )}
+
 
 
                 {haldleUerSteps()}

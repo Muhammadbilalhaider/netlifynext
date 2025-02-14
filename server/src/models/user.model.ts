@@ -5,7 +5,7 @@ import { Collection } from '../config/constants';
 // Interface for User Document
 export interface IUser extends Document {
   firstName: string;
-  lastName: string;
+  lastName: number;
   email: string;
   password: string;
   cities: string[];
@@ -29,7 +29,7 @@ const userSchema = new Schema({
     trim: true
   },
   lastName: {
-    type: String,
+    type: Number,
     required: true,
     trim: true
   },

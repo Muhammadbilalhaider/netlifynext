@@ -18,7 +18,7 @@ export interface updateUserPayload {
   _id: string;
   linkHash: number;
   firstName?: string;
-  lastName?: string;
+  lastName?: number;
   number?: string;
   DOB?: string;
   country?: string;
@@ -38,7 +38,7 @@ export interface addressPayload {
 export interface userRegisterPayload {
   _id: string;
   firstName: string;
-  lastName: string;
+  lastName: number;
   email: string;
   password: string;
   number: string;

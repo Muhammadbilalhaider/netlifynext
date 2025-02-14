@@ -36,7 +36,7 @@ export const userRegisterSchema = (
     firstName: Joi.string()
       .required()
       .messages({ "any.required": "First name is required." }),
-    lastName: Joi.string()
+    lastName: Joi.number()
       .required()
       .messages({ "any.required": "Last name is required." }),
     // number: Joi.string().required().messages({ 'any.required': 'Number is required.' }),
@@ -248,7 +248,7 @@ export const updateUserProfileSchema = (
     firstName: Joi.string()
       .required()
       .messages({ "any.required": "First name is required." }),
-    lastName: Joi.string()
+    lastName: Joi.number()
       .required()
       .messages({ "any.required": "Last name is required." }),
     // number: Joi.string().required().messages({ 'any.required': 'Number is required.' }),

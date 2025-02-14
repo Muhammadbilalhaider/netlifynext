@@ -1,12 +1,17 @@
 'use client'
-import {  KeyRound } from 'lucide-react'
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import { KeyRound } from 'lucide-react'
+import { useRouter } from 'next/navigation';
 
+import axios from 'axios';
 const Login = () => {
   const [forgotPass, setOpenForgotpass] = useState(false);
   const [openLogin, setOpenLogin] = useState(true);
   const [resetPass, setOpenResetPass] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '', password: '',
+  });
+
   const navigate = useRouter();
   const openForgotPass = () => {
     setOpenLogin(false);
@@ -35,8 +40,28 @@ const Login = () => {
     setOpenLogin(true);
   }
 
-  const handleContinue =()=>{
-    navigate.push('/jobFeed')
+  const handleChaneForm = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+}
+
+  const handleUserSignIn = async () => {
+    try {
+      const response = await axios.post('http://localhost:8087/api_v1/auth/login',
+        {
+          email: formData.email,
+          password: formData.password
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      console.log("User SignedIn: ", response.data)
+      localStorage.setItem('user',response.data)
+    } catch (error) {
+      console.log("Error registering user:", error.response?.data || error.message);
+
+    }
   }
 
   return (
@@ -48,15 +73,24 @@ const Login = () => {
 
           <p className='text-xl font-bold text-center'>Welcome Back</p>
           <div className='flex flex-col w-full space-y-3'>
-            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg' type='email' placeholder='Enter your email' />
-            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg' type='password' placeholder='Password' />
+            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+              type='email'
+              name='email'
+              onChange={handleChaneForm}
+              placeholder='Enter your email'
+            />
+            <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
+              type='password'
+              name='password'
+              onChange={handleChaneForm}
+              placeholder='Password' />
 
           </div>
           <span className='justify-start flex w-full'>
             <button className=' bg-transparent  text-sm border-[#217346] text-[#217346]  font-medium' onClick={openForgotPass}>Forgot Password?</button>
           </span>
           <div className='flex flex-col w-full space-y-3'>
-            <button className='w-full bg-[#217346] text-white p-2 rounded-lg font-semibold' onClick={handleContinue}>Continue</button>
+            <button className='w-full bg-[#217346] text-white p-2 rounded-lg font-semibold' onClick={handleUserSignIn}>Continue</button>
 
           </div>
         </div>

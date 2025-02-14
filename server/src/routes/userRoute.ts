@@ -5,6 +5,7 @@ import { changePasswordSchema, changeStatusSchema, getAllUsersSchema, getUserDet
 export const userRoute = (): Router => {
   const router = express.Router();
   router.get('/profile', getUserDetailSchema, getUserInfoController);
+
   router.post('/register', userRegisterSchema, userRegisterController);
   router.put('/addJobPreferences', userRegisterStep3Schema, addJobPreferencesController);
   router.put('/change-status', changeStatusSchema, changeStatusController);
