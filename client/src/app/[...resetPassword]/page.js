@@ -1,7 +1,8 @@
 'use client'
+import React, { useEffect, useState } from 'react'
 import { KeyRound } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import axios from 'axios'
 
 const page = () => {
   const navigate = useRouter()
@@ -15,13 +16,17 @@ const page = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+useEffect(()=>{
+  console.log(formData)
+},[formData])
+
 
   const handleResetPassword = async () => {
     const response = await axios.post('http://localhost:8087/api_v1/auth/reset-password',
       {
         _id: formData._id,
-        linkHash: formData.linkHash,
-        password: formData.password,
+       
+        password: formData.newPassword,
         confirmPassword: formData.confirmPassword
       },
       {
@@ -45,12 +50,7 @@ const page = () => {
 
             <p className='text-xl font-bold text-center'>Create New Password</p>
             <div className='flex flex-col w-full space-y-3'>
-              <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
-                type='text'
-                name='linkHash'
-                value={formData.linkHash}
-                onChange={handleChaneForm}
-                placeholder='Reset Code' />
+             
               <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
                 type='password'
                name='newPassword'

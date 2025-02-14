@@ -45,9 +45,10 @@ const Login = () => {
           },
         })
       console.log("User SignedIn: ", response.data)
-      const userId = response.data?.data?._id;
-      localStorage.setItem('user', JSON.stringify(response.data));
-      localStorage.setItem('userId', userId);
+      if(response.data.status_code ===200)
+      {
+        navigate.push('/jobFeed')
+      }
     } catch (error) {
       console.log("Error registering user:", error.response?.data || error.message);
 
@@ -160,12 +161,7 @@ const Login = () => {
 
             <p className='text-xl font-bold text-center'>Create New Password</p>
             <div className='flex flex-col w-full space-y-3'>
-              <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
-                type='text'
-                name='linkHash'
-                value={formData.linkHash}
-                onChange={handleChaneForm}
-                placeholder='Reset Code' />
+             
               <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
                 type='password'
                name='newPassword'

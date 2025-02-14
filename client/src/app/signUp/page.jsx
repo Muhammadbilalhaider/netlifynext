@@ -109,8 +109,8 @@ const CreateAccount = () => {
                 },
             }
         )
-        if (response.data.status_code == '201') {
-           console.log('Verified')
+        if (response.data.status_code === 201) {
+           handlestep()
         }
         console.log("OTP Send : ", response.data)
     }
