@@ -3,7 +3,7 @@ import { getJobsFromScraperAndInsertInDb } from "../services/jobServices";
 
 const runCronJob = async (): Promise<void> => {
   try {
-    getJobsFromScraperAndInsertInDb();
+    // getJobsFromScraperAndInsertInDb();
   } catch (error) {
     console.error("Cron job error---:", error.message);
   }
