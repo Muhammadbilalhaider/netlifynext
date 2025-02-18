@@ -50,25 +50,21 @@ const CreateAccount = () => {
         console.log("inside handleSave");
     
         try {
-            const token = localStorage.getItem("authToken"); // Retrieve token from localStorage
+            const token = localStorage.getItem("authToken"); 
             if (!token) {
                 console.error("Authorization token is missing!");
                 return;
             }
     
-            const userId = localStorage.getItem("userId"); // Retrieve user ID
+            const userId = localStorage.getItem("userId"); 
             if (!userId) {
                 console.error("User ID is missing!");
                 return;
             }
-    
-            // Ensure _id is included in the request payload
             const preferencesDataWithId = {
                 ...preferencesData,
                 _id: userId, 
             };
-    
-            console.log("Sending preferencesData:", preferencesDataWithId); // Debugging log
     
             const response = await axios.put(
                 'http://localhost:8087/api_v1/user/addJobPreferences',
@@ -105,15 +101,15 @@ const CreateAccount = () => {
                     ...prev,
                     primaryJobTitles: updatedTitles,
                 }));
-                return updatedTitles; // Important: Return the updated state for jobTitleList
+                return updatedTitles;  
             });
     
             setPreferencesData((prev) => ({
                     ...prev,
-                    primaryJobTitles: jobTitleList, // Append new value
+                    primaryJobTitles: jobTitleList,  
                 }));
     
-            setPreferencesData((prev) => ({ ...prev, primaryJobTitles: "" })); // Clear input field
+            setPreferencesData((prev) => ({ ...prev, primaryJobTitles: "" })); 
         }
     };  
     
@@ -125,7 +121,7 @@ const CreateAccount = () => {
                 ...prev,
                 primaryJobTitles: updatedTitles,
             }));
-            return updatedTitles; // Important: Return the updated state
+            return updatedTitles;  
         });
     };
     
@@ -137,15 +133,15 @@ const CreateAccount = () => {
                     ...prev,
                     excludedJobTitleKeywords: updatedTitles,
                 }));
-                return updatedTitles; // Important: Return the updated state for jobTitleList
+                return updatedTitles;  
             });
     
             setPreferencesData((prev) => ({
                     ...prev,
-                    excludedJobTitleKeywords: excludedTitle, // Append new value
+                    excludedJobTitleKeywords: excludedTitle,  
                 }));
     
-            setPreferencesData((prev) => ({ ...prev, excludedJobTitleKeywords: "" })); // Clear input field
+            setPreferencesData((prev) => ({ ...prev, excludedJobTitleKeywords: "" }));  
         }
     };  
     
@@ -157,7 +153,7 @@ const CreateAccount = () => {
                 ...prev,
                 excludedJobTitleKeywords: updatedTitles,
             }));
-            return updatedTitles; // Important: Return the updated state
+            return updatedTitles;  
         });
     };
 
@@ -173,7 +169,7 @@ const CreateAccount = () => {
                 return updatedCompanies;
             });
     
-            setPreferencesData((prev) => ({ ...prev, excludedCompanies: "" })); // Clear input field
+            setPreferencesData((prev) => ({ ...prev, excludedCompanies: "" }));  
         }
     };
     
@@ -202,7 +198,7 @@ const CreateAccount = () => {
                 return updatedTechnologies;
             });
     
-            setPreferencesData((prev) => ({ ...prev, excludedTechnologies: "" })); // Clear input field
+            setPreferencesData((prev) => ({ ...prev, excludedTechnologies: "" }));  
         }
     };
     
@@ -218,7 +214,7 @@ const CreateAccount = () => {
         });
     };
 
-    //
+    
     const addRequiredTechnologies = () => {
         if (preferencesData.requiredTechnologies.trim() !== '') {
             setRequiredTechnologies((prevTechnologies) => {
@@ -231,7 +227,7 @@ const CreateAccount = () => {
                 return updatedTechnologies;
             });
     
-            setPreferencesData((prev) => ({ ...prev, requiredTechnologies: "" })); // Clear input field
+            setPreferencesData((prev) => ({ ...prev, requiredTechnologies: "" }));  
         }
     };
     
@@ -259,18 +255,18 @@ const CreateAccount = () => {
         setPreferencesData((prev) => {
             if (name === 'secondaryJobTitles') {
                 const updatedJobLevel = checked
-                    ? [...prev.secondaryJobTitles, value] // Add if checked
-                    : prev.secondaryJobTitles.filter((item) => item !== value); // Remove if unchecked
+                    ? [...prev.secondaryJobTitles, value]  
+                    : prev.secondaryJobTitles.filter((item) => item !== value); 
     
                 return { ...prev, secondaryJobTitles: updatedJobLevel };
-            } else if (name === 'workType') { // Add workType handling
+            } else if (name === 'workType') {  
                 const updatedWorkType = checked
                     ? [...prev.workType, value]
                     : prev.workType.filter((item) => item !== value);
     
                 return { ...prev, workType: updatedWorkType };
             }else {
-                return { ...prev, [name]: value }; // Handle other input fields
+                return { ...prev, [name]: value };  
             }
         });
     };
@@ -294,9 +290,8 @@ const CreateAccount = () => {
                 if(response.data.status_code=='201')
                 {
                     console.log("User Registered: ", response.data);
-                                // Store userId in localStorage
-            localStorage.setItem("userId", response.data.data._id);
-
+                                 
+                localStorage.setItem("userId", response.data.data._id);
                     handleSendOTP()
                 }
            

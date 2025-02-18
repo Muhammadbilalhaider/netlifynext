@@ -54,12 +54,12 @@ const JobFeed = () => {
       </div>
 
       <div className="flex flex-col p-5 items-start bg-white w-full md:w-11/12 lg:w-8/12 shadow-lg rounded-lg">
-        {/* Job Title */}
+         
         <div className="lg:mb-4 w-full">
           <p className="font-bold lg:text-lg text-base lg:text-start md:text-start text-center mb-2 text-neutral-dark">Journeyman Plumber</p>
         </div>
 
-        {/* Job Details */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
           <div className="flex items-center">
             <span className="text-blue-500">
@@ -85,25 +85,19 @@ const JobFeed = () => {
           </div>
         </div>
 
-        {/* Separator */}
+         
         <div className="w-full py-6 mt-6">
           <hr className="border border-gray-400 opacity-40" />
         </div>
-
-        {/* About Section */}
      <div className='w-full'>
      <p className="lg:text-lg md:text-base text-sm lg:text-start md:text-start text-center font-semibold text-neutral-dark mb-2">About G&C Plumbing & Heating LLC</p>
         <p className="text-gray-600 lg:text-base md:text-sm text-xs lg:text-start md:text-start text-center leading-relaxed">
           G&C Plumbing & Heating is a company dedicated to providing exceptional plumbing services while fostering a supportive and growth-oriented work environment.
         </p>
      </div>
-
-        {/* Separator */}
         <div className="w-full py-6">
           <hr className="border border-gray-400 opacity-40" />
         </div>
-
-        {/* Position Overview */}
         <div className='w-full'>
         <p className="lg:text-lg text-base lg:text-start md:text-start text-center font-semibold text-neutral-dark mb-2">Position Overview</p>
         <p className="leading-relaxed lg:text-base md:text-sm text-xs lg:text-start md:text-start text-center text-gray-600">
@@ -134,10 +128,6 @@ const JobFeed = () => {
 
           </div>
         </div>
-
-
-
-        {/* Key Responsibilities */}
         <div className="w-full mt-6">
           <p className="lg:text-lg text-base lg:text-start text-center md:text-start text-neutral-dark font-semibold mb-2">Key Responsibilities</p>
           <ul className="list-disc ml-5 space-y-3">
@@ -148,11 +138,6 @@ const JobFeed = () => {
             ))}
           </ul>
         </div>
-
-
-
-
-        {/* Requirements */}
         <div className="w-full mt-6">
           <p className="lg:text-lg text-base text-neutral-dark lg:text-start md:text-start text-center font-semibold mb-2">Requirements</p>
           <ul className="list-disc ml-5 space-y-3">
@@ -163,8 +148,6 @@ const JobFeed = () => {
             ))}
           </ul>
         </div>
-
-        {/* Soft Skills */}
         <div className="mt-6 flex flex-col lg:w-8/12 md:w-9/12 w-full">
           <p className="lg:text-lg text-base lg:text-start md:text-start text-center text-neutral-dark font-semibold mb-2">Soft Skills</p>
           <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 p-0 gap-2 sm:items-center sm:justify-center">
@@ -176,9 +159,6 @@ const JobFeed = () => {
             </div>
           </div>
         </div>
-
-        {/* Required Technologies */}
-
         <div className="mt-6 flex flex-col lg:w-8/12 md:w-9/12 w-full">
           <p className="lg:text-lg text-base lg:text-start md:text-start text-center text-neutral-dark font-semibold mb-2">Required Technologies</p>
           <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 p-0 gap-2 sm:items-center sm:justify-center">
@@ -190,15 +170,12 @@ const JobFeed = () => {
             </div>
           </div>
         </div>
-
-
-         {/* Separator */}
          <div className="w-full py-3 mt-6">
           <hr className="border border-gray-400 opacity-40" />
         </div>
       </div>
 
-      {/* Footer Action Buttons */}
+    
       <div className="fixed bottom-16 flex justify-center w-full space-x-6">
         <div className="p-4 border-2 hover:text-white border-[#f83b22] hover:bg-[#f83b22] text-[#f83b22] rounded-full cursor-pointer hover:scale-110 transition-transform">
           <X size={30} />

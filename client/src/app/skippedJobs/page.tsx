@@ -4,11 +4,7 @@ import { Search, Ban } from 'lucide-react';
 
 
 const SkippedJob = () => {
-  const [skippedData, setSkipppedData] = useState<string[]>([]);
-
-  useEffect(() => {
-    setSkipppedData(['hello'])
-  }, [])
+  const [skippedData, setSkipppedData] = useState<string[]>(["Hello"]);
 
   return (
     <div className="w-full flex flex-col justify-center items-start py-10 px-4 sm:px-8 lg:px-20 xl:px-32 space-y-6">

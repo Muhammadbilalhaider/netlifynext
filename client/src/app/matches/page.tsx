@@ -9,16 +9,10 @@ import {
   Search,
 } from "lucide-react";
 
-
 const Matchjobs = () => {
 
-  const [matchedData, setMatchedData] = useState<string | string[]>([]);
-
-  useEffect(() => {
-    setMatchedData("hello");
-  }, [matchedData])
-
-
+  const [matchedData, setMatchedData] = useState<string | string[]>(["Hello"]);
+ 
   return (
     <div className="w-full flex flex-col justify-center items-start py-10 px-5 sm:px-10 lg:px-32">
 
@@ -27,8 +21,6 @@ const Matchjobs = () => {
         <p className='text-gray-500 mt-1 text-xs lg:text-base'>
           Review and apply to jobs you've matched with
         </p>
-
-
         <div className="flex flex-row justify-center items-center py-8 gap-4 sm:flex-nowrap sm:gap-2">
           <div className="w-full sm:w-64 md:w-full flex items-center bg-white pl-2 rounded-xl">
             <span className="text-slate-400">
@@ -46,11 +38,7 @@ const Matchjobs = () => {
             <span className="text-lg text-black lg:ml-1"><p className='text-base md:text-sm'>Filter</p></span>
           </div>
         </div>
-
-
-
         <div className="flex p-3 flex-col w-full bg-white border border-gray-300 rounded-xl space-y-3">
-
           {matchedData.length > 0 ?
             (
               <>
@@ -103,9 +91,6 @@ const Matchjobs = () => {
 
               </>
             )}
-
-
-
         </div>
       </div>
 

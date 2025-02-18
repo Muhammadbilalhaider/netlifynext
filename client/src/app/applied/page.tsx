@@ -34,7 +34,6 @@ const Applied = () => {
   };
 
   const handleAddNotes = () => {
-
     setOPenNotes(true)
   }
 

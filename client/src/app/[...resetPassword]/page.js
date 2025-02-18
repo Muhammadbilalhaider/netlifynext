@@ -16,11 +16,6 @@ const page = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-useEffect(()=>{
-  console.log(formData)
-},[formData])
-
-
   const handleResetPassword = async () => {
     const response = await axios.post('http://localhost:8087/api_v1/auth/reset-password',
       {
@@ -41,16 +36,12 @@ useEffect(()=>{
 
   }
 
-
-
   return (
     <div className='flex w-full flex-col justify-center items-center space-y-4'>
          <div className='flex flex-col w-full lg:w-2/6 h-full shadow-lg bg-white justify-center items-center space-y-4 my-20 py-8 px-6 rounded-2xl'>
             <span className='text-[#217346]'><KeyRound size={60} /></span>
-
             <p className='text-xl font-bold text-center'>Create New Password</p>
             <div className='flex flex-col w-full space-y-3'>
-             
               <input className='p-3 w-full border-2 border-[#247BAF]  focus:outline-none focus:ring-1 focus:ring-[#247BAF] rounded-lg'
                 type='password'
                name='newPassword'

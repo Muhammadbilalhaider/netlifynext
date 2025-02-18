@@ -5,13 +5,6 @@ import { Briefcase, Building2, Code, MapPin } from 'lucide-react'
 
 const Preferences = () => {
   const [progressValue, setProgressValue] = useState<number | null>(25);
-
-
-  useEffect(()=>{
-    
-  },[progressValue])
-
-
   
   return (
     <div className="w-full flex flex-col justify-center items-start lg:pb-24 pb-20 sm:pb-20 py-10 md:px-5 px-2 sm:px-3 lg:px-48">
