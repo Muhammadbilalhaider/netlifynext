@@ -4,13 +4,26 @@ import { Collection } from "../config/constants";
 
 // Interface for Job Preferences Document
 export interface IJobPreferences extends Document {
+  // userId: Types.ObjectId;
+  // primaryJobTitles: string[];
+  // secondaryJobTitles: string[];
+  // jobLocationPreferences: string[];
+  // createdAt: number;
+  // updatedAt: number;
   userId: Types.ObjectId;
+  resume: string;
+  jobPreferences: string;
   primaryJobTitles: string[];
   secondaryJobTitles: string[];
-  jobLocationPreferences: string[];
+  
+  requiredTechnologies: string[];
+  workType: string[];
+  jobLocations: string[];
+  
   createdAt: number;
   updatedAt: number;
 }
+
 
 // Job Preferences Schema
 const jobPreferencesSchema = new Schema(
@@ -19,6 +32,14 @@ const jobPreferencesSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: Collection.userTableName,
       required: true,
+    },
+    resume: {
+      type: String,
+      trim: true,
+    },
+    jobPreferences: {
+      type: String,
+      trim: true,
     },
     primaryJobTitles: [
       {
@@ -32,7 +53,13 @@ const jobPreferencesSchema = new Schema(
         trim: true,
       },
     ],
-    jobLocationPreferences: [
+    requiredTechnologies: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    workType: [
       {
         type: String,
         trim: true,

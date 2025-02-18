@@ -7,7 +7,9 @@ export const userRoute = (): Router => {
   router.get('/profile', getUserDetailSchema, getUserInfoController);
 
   router.post('/register', userRegisterSchema, userRegisterController);
-  router.put('/addJobPreferences', userRegisterStep3Schema, addJobPreferencesController);
+  // router.put('/addJobPreferences', userRegisterStep3Schema, addJobPreferencesController);
+  router.put('/addJobPreferences', addJobPreferencesController);
+
   router.put('/change-status', changeStatusSchema, changeStatusController);
   router.get('/all', getAllUsersSchema, getAllUsersController);
   router.put('/change-password', changePasswordSchema, changePasswordController);

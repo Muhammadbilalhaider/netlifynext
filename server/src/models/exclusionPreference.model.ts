@@ -4,12 +4,18 @@ import { Collection } from '../config/constants';
 
 // Interface for Exclusion Preferences Document
 export interface IExclusionPreference extends Document {
+  // userId: Types.ObjectId;
+  // excludedJobTitleKeywords: string[];
+  // avoidedJobTitleWords: string[];
+  // excludedCompanies: string[];
+  // excludedDescriptionKeywords: string[];
+  // requiredDescriptionKeywords: string[];
+  // createdAt: number;
+  // updatedAt: number;
   userId: Types.ObjectId;
-  excludedJobTitleKeywords: string[];
-  avoidedJobTitleWords: string[];
+excludedJobTitleKeywords: string[];
+  excludedTechnologies: string[];
   excludedCompanies: string[];
-  excludedDescriptionKeywords: string[];
-  requiredDescriptionKeywords: string[];
   createdAt: number;
   updatedAt: number;
 }
@@ -29,18 +35,11 @@ const exclusionPreferencesSchema = new Schema({
     type: String,
     trim: true
   }],
-  avoidedJobTitleWords: [{
+  excludedTechnologies: [{
     type: String,
     trim: true
   }],
-  excludedDescriptionKeywords: [{
-    type: String,
-    trim: true
-  }],
-  requiredDescriptionKeywords: [{
-    type: String,
-    trim: true
-  }]
+  
 }, {
   timestamps: {
     currentTime: () => Date.now()

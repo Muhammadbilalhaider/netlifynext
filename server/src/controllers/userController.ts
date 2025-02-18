@@ -266,8 +266,11 @@ export const deleteUserController = async (req: CustomRequest, res: Response) =>
 }
 
 export const addJobPreferencesController = async (req: any, res: Response) => {
+  console.log("REq.Body",req.body)
+  console.log("req.user",req.user)
+
   try {
-    const userId = req.user._id; // Assuming you have user info in request from auth middleware
+    const userId = req.body._id; // Assuming you have user info in request from auth middleware
     const settings: UpdateSettingsDto = req.body;
 
     // Validate required fields

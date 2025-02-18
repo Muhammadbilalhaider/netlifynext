@@ -46,34 +46,51 @@ const CreateAccount = () => {
         } 
     }
 
-    const handleSavePreferences =   async() => {
-        console.log("inside handleSave")
+    const handleSavePreferences = async () => {
+        console.log("inside handleSave");
+    
         try {
+            const token = localStorage.getItem("authToken"); // Retrieve token from localStorage
+            if (!token) {
+                console.error("Authorization token is missing!");
+                return;
+            }
+    
+            const userId = localStorage.getItem("userId"); // Retrieve user ID
+            if (!userId) {
+                console.error("User ID is missing!");
+                return;
+            }
+    
+            // Ensure _id is included in the request payload
+            const preferencesDataWithId = {
+                ...preferencesData,
+                _id: userId, 
+            };
+    
+            console.log("Sending preferencesData:", preferencesDataWithId); // Debugging log
+    
             const response = await axios.put(
-                'http://localhost:8087/api_v1/user/preferences',
-                preferencesData, // Send preferencesData as payload
+                'http://localhost:8087/api_v1/user/addJobPreferences',
+                preferencesDataWithId,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        // Add Authorization header if needed
+                        "Authorization": `Bearer ${token}`,
                     },
                 }
             );
     
             if (response.data.status_code === 201) {
                 console.log("Preferences saved:", response.data);
-                // Handle success (e.g., redirect, show message)
-                // Example:
-                // navigate.push("/success"); // Redirect to a success page
             } else {
                 console.error("Error saving preferences:", response.data);
-                // Handle error (e.g., display error message)
             }
         } catch (error) {
             console.error("Error saving preferences:", error.response?.data || error.message);
-            // Handle error (e.g., display error message)
         }
     };
+    
     const handleBackStep = () => {
         if (step <= totalstep) {
             setstep(step - 1)
@@ -277,6 +294,9 @@ const CreateAccount = () => {
                 if(response.data.status_code=='201')
                 {
                     console.log("User Registered: ", response.data);
+                                // Store userId in localStorage
+            localStorage.setItem("userId", response.data.data._id);
+
                     handleSendOTP()
                 }
            

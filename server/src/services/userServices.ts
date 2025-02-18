@@ -916,10 +916,8 @@ export const userProfileDetail = async (
 };
 
 // avoidedJobTitleWords
-export const updateSettings = async (
-  userId: string,
-  settings: UpdateSettingsDto
-) => {
+export const updateSettings = async ( userId: string, settings: UpdateSettingsDto) => {
+  console.log("settings ==>", settings);
   try {
     // Update JobPreference
     console.log("with respect to user Id", userId);
@@ -927,9 +925,11 @@ export const updateSettings = async (
       { userId },
       {
         $set: {
-          primaryJobTitles: settings.primaryJobTitle,
-          secondaryJobTitles: settings.secondaryJobTitle,
-          jobLocationPreferences: settings.jobLocationPreference,
+          resumeContent: settings.resume,
+          jobpreference: settings.jobPreferences,
+          primaryJobTitles: settings.primaryJobTitles,
+          secondaryJobTitles: settings.secondaryJobTitles,
+          workType: settings.workType,
           jobLocations: settings.jobLocations,
         },
       },
@@ -941,13 +941,13 @@ export const updateSettings = async (
       { userId },
       {
         $set: {
-          avoidedJobTitleWords: [
+          excludedJobTitleKeywords: [
             //   ...settings.excludedJobTitleKeywords,
-            ...settings.avoidedJobTitleWords,
+            ...settings.excludedJobTitleKeywords,
           ],
           excludedCompanies: settings.excludedCompanies,
-          excludedDescriptionKeywords: settings.excludedIndustriesTechnologies,
-          requiredDescriptionKeywords: settings.specificIndustriesTechnologies,
+          excludedTechnologies: settings.excludedTechnologies,
+          requiredTechnologies: settings.requiredTechnologies,
         },
       },
       { new: true, upsert: true }
