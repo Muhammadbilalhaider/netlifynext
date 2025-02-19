@@ -4,7 +4,7 @@ import React from 'react'
 import { Rocket } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 
-const LoginOptions = () => {
+const authOptions = () => {
     const navigate = useRouter();
      
     return (
@@ -23,4 +23,4 @@ const LoginOptions = () => {
         </div>
     )
 }
-export default LoginOptions
+export default authOptions

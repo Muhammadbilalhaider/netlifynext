@@ -1,10 +1,22 @@
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import { Briefcase, Heart, CheckSquare, X, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 
 const Navigation = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if(authToken){
+      setIsAuthenticated(true);
+    }
+   
+  }, [isAuthenticated]);
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t py-2 z-50 shadow-lg">
+     {isAuthenticated &&
       <ul className="flex justify-around items-center w-full">
         <li className="flex flex-col items-center justify-center cursor-pointer group">
           <Link href="/jobFeed" className="flex flex-col items-center justify-center text-xs text-gray-800 hover:text-blue-500">
@@ -43,6 +55,8 @@ const Navigation = () => {
           </Link>
         </li>
       </ul>
+
+     }
     </div>
   );
 };
